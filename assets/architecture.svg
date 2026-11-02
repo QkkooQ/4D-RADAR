@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="620" viewBox="0 0 1200 620">
+  <rect width="1200" height="620" fill="#0b1220"/>
+  <text x="600" y="52" text-anchor="middle" fill="#f8fafc" font-family="Arial, sans-serif" font-size="28" font-weight="700">4D Radar + Camera 3D Perception</text>
+  <text x="600" y="82" text-anchor="middle" fill="#94a3b8" font-family="Arial, sans-serif" font-size="15">Competition prototype · module-level overview</text>
+
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L0,6 L9,3 z" fill="#64748b"/>
+    </marker>
+    <style>
+      .box { stroke-width: 2; rx: 16; }
+      .label { fill: #e2e8f0; font-family: Arial, sans-serif; font-size: 16px; font-weight: 700; }
+      .sub { fill: #94a3b8; font-family: Arial, sans-serif; font-size: 12px; }
+      .flow { stroke: #64748b; stroke-width: 2.5; fill: none; marker-end: url(#arrow); }
+    </style>
+  </defs>
+
+  <rect class="box" x="55" y="150" width="210" height="128" fill="#172554" stroke="#3b82f6"/>
+  <text class="label" x="160" y="190" text-anchor="middle">4D Radar Point Cloud</text>
+  <text class="sub" x="160" y="219" text-anchor="middle">bin parsing · 8-D features</text>
+  <text class="sub" x="160" y="241" text-anchor="middle">calibration transform</text>
+
+  <rect class="box" x="55" y="352" width="210" height="128" fill="#3b1024" stroke="#ec4899"/>
+  <text class="label" x="160" y="392" text-anchor="middle">Monocular Camera</text>
+  <text class="sub" x="160" y="421" text-anchor="middle">image loading · RGB features</text>
+  <text class="sub" x="160" y="443" text-anchor="middle">ResNet18 encoder</text>
+
+  <rect class="box" x="355" y="150" width="210" height="128" fill="#112e29" stroke="#10b981"/>
+  <text class="label" x="460" y="190" text-anchor="middle">PointPillars Branch</text>
+  <text class="sub" x="460" y="219" text-anchor="middle">voxelize · pillar encode</text>
+  <text class="sub" x="460" y="241" text-anchor="middle">scatter to BEV</text>
+
+  <rect class="box" x="355" y="352" width="210" height="128" fill="#342007" stroke="#f59e0b"/>
+  <text class="label" x="460" y="392" text-anchor="middle">Image-to-BEV Branch</text>
+  <text class="sub" x="460" y="421" text-anchor="middle">depth-aware feature lift</text>
+  <text class="sub" x="460" y="443" text-anchor="middle">simplified projection</text>
+
+  <rect class="box" x="665" y="252" width="205" height="126" fill="#1e1b4b" stroke="#8b5cf6"/>
+  <text class="label" x="767" y="292" text-anchor="middle">Feature Fusion</text>
+  <text class="sub" x="767" y="321" text-anchor="middle">channel concatenation</text>
+  <text class="sub" x="767" y="343" text-anchor="middle">shared BEV representation</text>
+
+  <rect class="box" x="935" y="178" width="205" height="126" fill="#27272a" stroke="#a1a1aa"/>
+  <text class="label" x="1037" y="218" text-anchor="middle">2D CNN Backbone</text>
+  <text class="sub" x="1037" y="247" text-anchor="middle">multi-scale BEV features</text>
+
+  <rect class="box" x="935" y="342" width="205" height="126" fill="#31111d" stroke="#f43f5e"/>
+  <text class="label" x="1037" y="382" text-anchor="middle">Detection Head</text>
+  <text class="sub" x="1037" y="411" text-anchor="middle">Car · Cyclist · Truck</text>
+  <text class="sub" x="1037" y="433" text-anchor="middle">3D boxes + confidence</text>
+
+  <path class="flow" d="M265 214 H355"/>
+  <path class="flow" d="M265 416 H355"/>
+  <path class="flow" d="M565 214 C615 214 620 292 665 292"/>
+  <path class="flow" d="M565 416 C615 416 620 338 665 338"/>
+  <path class="flow" d="M870 315 H895 V241 H935"/>
+  <path class="flow" d="M1037 304 V342"/>
+</svg>

@@ -1,11 +1,11 @@
 import argparse
-from datasets.drad_dataset import DRadDataset
-import config
-from visualization import visualize_2d
-from visualization.visualize_3d import get_bbox_points
 import matplotlib.pyplot as plt
 import numpy as np
-from itertools import combinations
+
+from configs.default import CLASS_COLORS, DATASET_ROOT
+from src.data.drad_dataset import DRadDataset
+from src.visualization.visualize_2d import draw_image_with_bbox
+from src.visualization.visualize_3d import get_bbox_points
 
 def draw_bbox_lines(ax, corners, color='r'):
     """
@@ -22,7 +22,7 @@ def draw_bbox_lines(ax, corners, color='r'):
         ax.plot(xs, ys, zs, color=color, linewidth=1)
 
 def main(args):
-    dataset = DRadDataset(split='train')
+    dataset = DRadDataset(root_path=DATASET_ROOT, split='train')
     print(f"数据集大小: {len(dataset)}")
     
     num_frames = min(args.num_frames, len(dataset))
@@ -32,13 +32,14 @@ def main(args):
         data = dataset[i]
         image = data['image']
         points = data['points']
-        labels = data['labels']
+        gt_boxes = data.get('gt_boxes', np.empty((0, 7)))
+        gt_names = data.get('gt_names', [])
 
         fig = plt.figure(figsize=(12,6))
 
         # 左 2D
         ax1 = fig.add_subplot(121)
-        img_with_bbox = visualize_2d.draw_image_with_bbox(image, labels, config.CLASS_COLORS)
+        img_with_bbox = image
         ax1.imshow(img_with_bbox)
         ax1.set_title(f"Frame {i} 2D")
         ax1.axis('off')
@@ -48,23 +49,11 @@ def main(args):
         xs, ys, zs = points[:,0], points[:,1], points[:,2]
         ax2.scatter(xs, ys, zs, c='gray', s=1)
 
-        if labels is not None:
-            for label_line in labels:
-                parts = label_line.strip().split()
-                cls = parts[0]
-                if len(parts) < 15:
-                    continue  # 没有 3D 信息
-                try:
-                    h, w, l = float(parts[10]), float(parts[8]), float(parts[9])
-                    x, y, z = float(parts[11]), float(parts[12]), float(parts[13])
-                    ry = float(parts[14])
-                except:
-                    continue
-
-                corners = get_bbox_points(h, w, l, x, y, z, ry)
-                print(f"Frame {i}, 类别 {cls}, bbox corners:\n", corners)
-
-                draw_bbox_lines(ax2, corners, color='r')
+        for box, class_name in zip(gt_boxes, gt_names):
+            x, y, z, length, width, height, heading = box
+            corners = get_bbox_points(height, width, length, x, y, z, heading)
+            color = np.array(CLASS_COLORS.get(class_name, (255, 255, 255))) / 255.0
+            draw_bbox_lines(ax2, corners, color=color)
 
         ax2.set_title(f"Frame {i} 3D")
         ax2.set_xlabel("X")
