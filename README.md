@@ -25,7 +25,7 @@ presented as a production self-driving system.
 | Image branch | ResNet18 feature extraction and simplified depth-aware BEV lifting |
 | Output | Per-class 3D boxes and confidence scores |
 | Classes | Car, Cyclist, Truck |
-| Context | AIC 2025 team competition prototype, completed in 2025 |
+| Context | Independently developed AIC 2025 competition prototype |
 
 ![BEV point-cloud preview](assets/bev-preview.png)
 
